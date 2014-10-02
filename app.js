@@ -55,7 +55,7 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
+app.get('/', user.index);
 app.get('/users', user.list);
 
 
@@ -79,10 +79,13 @@ app.get('/logout', user.logout);
 app.get('/admin', function(req, res){
 	res.render("admin.ejs");
 });
-app.post('/add_category', admin.add_category);
-app.post('/add_product', admin.add_product);
-app.post('/remove_category', admin.remove_category);
-app.post('/remove_product', admin.remove_product);
+app.post('/add_category', user.add_categ);
+app.post('/add_product', user.add_product);
+app.get('/remove_category/:cat_name', user.remove_cat);
+app.get('/remove_product/:prod_id', user.remove_prod);
+app.get('/product_details/:prod_id', user.prod_details);
+app.get('/add_to_cart/:prod_id', user.add_to_cart);
+
 
 
 http.createServer(app).listen(app.get('port'), function(){

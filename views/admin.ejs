@@ -142,7 +142,113 @@
 			</div>
 		</div><!--/header-bottom-->
 	</header><!--/header-->
+								
+								
+								
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg .tg-8e65{background-color:#f8a102}
+</style>
+
+
 	
+<table class="tg">
+  <tr>
+    <th class="tg-8e65" colspan="2">Category</th>
+  </tr>
+  
+  						
+					
+  <% var drop_down_categories=[];
+								for (var c in category) {
+								
+								var item = category[c];
+									for (var v in item) {
+									var b= item[v];
+										for (var n in b) {
+										
+											var attribute = b[n];
+	        	        					for (var z in attribute) {
+	        	        					%><tr> <td class="tg-031e"><%=attribute[z]%></td>
+	        	        					<td class="tg-031e"><a href="remove_category/<%=attribute[z]%>" id=<%=attribute[z]%> >Delete</a></td>
+	        	        					</tr>
+	        	        					<% drop_down_categories[z]=attribute[z];
+	        	        					}
+										}
+									}
+								}
+								%>
+</table>
+								
+					
+  			
+<br><br>	
+
+<form action="remove_product", method="POST">							
+<table class="tg">
+  <tr>
+    <th class="tg-8e65" colspan="3"><b>Products</b></th>
+  </tr>
+							
+<tr> <td class="tg-031e"><b>Product</b></td><td class="tg-031e"><b>Category</b></td><td class="tg-031e"><b>Delete</b></td></tr>
+	        	        			
+	
+								<%
+								var object1=[];
+								for (var k in products) {
+								
+								
+								var items = products[k];
+				        	      for (var x in items) {
+	        	        			
+	        			    	    object1[x] = items[x];
+	        	    			    var sag= items[x];
+	        	        			var keys = Object.keys(items[x]);
+								   
+									var value=null;
+	        	       					for (var y in sag) {
+	        	        					var attribute = sag[y];
+	        	        					for (var z in attribute) {
+	        	        					value = value+","+attribute[z];
+	        	        					
+	        	        											}
+	        	        					
+	        	        									}
+									
+	        	       				value= value.split(",");
+	        	       				for(var i = value.length - 1; i >= 0; i--) {
+ 								   			if(value[i] === "undefined") {
+       										value.splice(i, 1);
+   										 							}
+   										 	if(value[i] === "null") {
+       										value.splice(i, 1);
+   										 							}
+																				}
+	        	       				
+	        	       				var tempo = keys[x];
+									
+									var i=1;
+	        	        			var link_to_product="";
+	        	        			%><tr><%
+	        	        			for (var x in keys)
+	   				     	        {
+									if(x==0 || x==2) {
+	   				     	        %>
+	        	        			<td class="tg-031e"><%=value[x]%></td>
+	        	        			<% }	
+	        	        			if(x==1){  link_to_product=value[x];}
+	        	        			}
+	   				     	        %><td class="tg-031e"><a href="remove_product/<%=link_to_product%>" id=<%=attribute[z]%> >Delete</a></td></tr>
+	   				     	        <%
+	   				     	         value = null;
+	        	        			}
+								}
+								%>
+					</table>
+	</form>							
+								
 	<section id="form"><!--form-->
 		<div class="container">
 			<div class="row">
@@ -164,9 +270,14 @@
 						<h2>Add Product</h2>
 						<form action="add_product", method="POST">
 							<input type="text" name="new_product" placeholder="Product Name" />
-							<input type="text" name="new_product" placeholder="Price" />
-							<input type="file" name="Image" accept="image/*">
-							<input type="text" name="new_product" placeholder="Product" />
+							<input type="text" name="price" placeholder="Price" />
+							<input type="file" name="image" accept="image/*">
+							<select id="drop_down_category">
+							<% for (var cat_list in drop_down_categories) { %>
+  							<option value="<%=drop_down_categories[cat_list]%>"><%=drop_down_categories[cat_list]%></option>
+  							<% } %>
+							</select>
+							
 							
 							
 							<button type="submit" class="btn btn-default">ADD</button>
@@ -176,34 +287,7 @@
 			</div>
 		</div>
 	</section><!--/form-->
-		<section id="form"><!--form-->
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-4 col-sm-offset-1">
-					<div class="login-form"><!--login form-->
-						<h2>Remove Category</h2>
-						<form action="remove_category", method="POST">
-							<input type="text" name="remove_category" placeholder="Category" />
-							<button type="submit" class="btn btn-default">Remove</button>
-						</form>
-					</div><!--/login form-->
-				</div>
-				<div class="col-sm-1">
-					<h2 class="or">OR</h2>
-				</div>
-				<div class="col-sm-4">
-					<div class="signup-form"><!--sign up form-->
-						
-						<h2>Remove Product</h2>
-						<form action="remove_product", method="POST">
-							<input type="text" name="remove_product" placeholder="Product" />
-							<button type="submit" class="btn btn-default">Remove</button>
-						</form>
-					</div><!--/sign up form-->
-				</div>
-			</div>
-		</div>
-	</section><!--/form-->
+		
 	
 	<footer id="footer"><!--Footer-->
 		<div class="footer-top">
