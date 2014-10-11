@@ -23,15 +23,16 @@ app.configure(function () {
 	app.use(express.methodOverride());
 //	app.use(express.cookieParser());																						//Parses the Cookie header field and populates req.cookies 
 	app.use(express.cookieParser("thissecretrocks"));
-	app.use(express.cookieSession({ secret: 'xDDFsdfddsdfSDdbg', cookie: { maxAge: null }}));									//To maintain cookie-based sessions and populates req.session
+	//app.use(express.cookieSession({ secret: 'xDDFsdfddsdfSDdbg', cookie: { maxAge: null }}));									//To maintain cookie-based sessions and populates req.session
+	app.use(express.session({secret: '1234567890QWERTY'}));
+	
 	app.use(app.router);
 	app.use(express.static(path.join(application_root, "public")));
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 
-app.set('port', 80);
-//app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -61,7 +62,8 @@ app.get('/users', user.list);
 
 
 app.get('/login', function(req, res){
-	res.render("login.ejs");
+	console.log("in server.js: "+req.session.category);
+	res.render("login.ejs",{category:req.session.category, products: req.session.products});
 });
 app.get('/cart', function(req, res){
 	res.render("cart.ejs");
@@ -85,9 +87,12 @@ app.post('/add_product', user.add_product);
 app.get('/remove_category/:cat_name', user.remove_cat);
 app.get('/remove_product/:prod_id', user.remove_prod);
 app.get('/product_details/:prod_id', user.prod_details);
-app.get('/add_to_cart/:prod_id', user.add_to_cart);
-
-
+app.post('/add_to_cart/:prod_id', user.add_to_cart);
+app.get('/get_cart',user.view_cart);
+app.get('/remove_from_cart/:prod_id',user.remove_from_cart);
+app.get('/get_category_products/:cat_name', user.get_category_products);
+app.get('/your_history',user.your_history);
+app.get('/my_account',user.my_account);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

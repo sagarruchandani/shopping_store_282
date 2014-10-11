@@ -22,6 +22,23 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="../images/ico/apple-touch-icon-57-precomposed.png">
+    
+    <script>
+function cardnumber(inputtxt)  
+{  
+  var cardno = /^(?:4[0-9]{12}(?:[0-9]{3})?)$/;  
+  if(inputtxt.value.match(cardno))  
+        {  
+      return true;  
+        }  
+      else  
+        {  
+        alert("Not a valid Visa credit card number!");  
+        return false;
+        }  
+};
+</script>
+
 </head><!--/head-->
 
 <body>
@@ -86,11 +103,16 @@
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li><a href=""><i class="fa fa-user"></i> Account</a></li>
-								<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
-								<li><a href="checkout"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-								<li><a href="cart" class="active"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<li><a href="login"><i class="fa fa-lock"></i> Login</a></li>
+								<li><a href="/my_account"><i class="fa fa-user"></i> Account</a></li>
+								<li><a href="/get_cart" class="active"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+								
+								<% if (typeof user_check == 'undefined') { %>
+								<li><a href="/login"><i class="fa fa-lock"></i> Login</a></li>
+								<%} else {%>
+								<li><a href="/my_account"><i class="fa fa-lock"></i> Hi, <%=user_check%></a></li>
+								<li><a href="/logout"><i class="fa fa-star"></i> logout</a></li>
+								<%}%>
+								
 							</ul>
 						</div>
 					</div>
@@ -115,20 +137,36 @@
 								<li><a href="/">Home</a></li>
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="all_products">All Products</a></li>
-										<li><a href="checkout">Checkout</a></li> 
-										<li><a href="cart">Cart</a></li> 
-										<li><a href="login">Login</a></li> 
+                                    <li><a href="/">All Products</a></li>
+                                    <% 
+								for (var c in category) {
+								
+								var item = category[c];
+									for (var v in item) {
+									var b= item[v];
+										for (var n in b) {
+										
+											var attribute = b[n];
+	        	        					for (var z in attribute) {
+	        	        					%>
+											<li><a href="/get_category_products/<%=attribute[z]%>" id=<%=attribute[z]%> ><%=attribute[z]%></a></li>
+											
+	        	        					<%
+	        	        					}
+										}
+									}
+								}
+								%>
                                     </ul>
                                 </li> 
 								<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="blog">Blog List</a></li>
-										<li><a href="blog-single">Blog Single</a></li>
+                                        <li><a href="#">Blog List</a></li>
+										<li><a href="#">Blog Single</a></li>
                                     </ul>
                                 </li> 
-								<li><a href="404">404</a></li>
-								<li><a href="contact-us">Contact</a></li>
+								<li><a href="#">404</a></li>
+								<li><a href="#">Contact</a></li>
 							</ul>
 						</div>
 					</div>
@@ -151,6 +189,10 @@
 				</ol>
 			</div>
 			<div class="table-responsive cart_info">
+			<% if (typeof message == 'undefined') { } else {%>
+			<p style="color:red; margin-left:20em;"><%=message%></p>
+								<% }%>
+			
 				<table class="table table-condensed">
 					<thead>
 						<tr class="cart_menu">
@@ -162,83 +204,48 @@
 							<td></td>
 						</tr>
 					</thead>
+					
 					<tbody>
+					<%
+					for(var row in current_cart){
+						var image="";var product="";var prod_id="";var price="";var quantity="";var total="";
+						var column = current_cart[row];
+						for(var col in column)
+						{
+						
+						if(col=="prod_id"){prod_id=column[col];}
+						if(col=="product"){product=column[col];}
+						if(col=="image"){image=column[col];}
+						if(col=="price"){price=column[col];}
+						if(col=="quantity"){quantity=column[col];}
+						}
+					%>
 						<tr>
 							<td class="cart_product">
-								<a href=""><img src="../images/cart/one.png" alt=""></a>
+								<a href=""><img src="../images/<%=image%>" width="60" height="60" alt=""></a>
 							</td>
 							<td class="cart_description">
-								<h4><a href="">Colorblock Scuba</a></h4>
-								<p>Web ID: 1089772</p>
+								<h4><a href=""><%=product%></a></h4>
+								<p>Web ID: <%=prod_id%></p>
 							</td>
 							<td class="cart_price">
-								<p>$59</p>
+								<p><%=price%></p>
 							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
+							<td class="cart_price">
+								<p><%=quantity%></p>
 							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
-							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
-						</tr>
 
-						<tr>
-							<td class="cart_product">
-								<a href=""><img src="../images/cart/two.png" alt=""></a>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Colorblock Scuba</a></h4>
-								<p>Web ID: 1089772</p>
-							</td>
-							<td class="cart_price">
-								<p>$59</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
 							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
+								<p class="cart_total_price"><%=quantity*price%></p>
 							</td>
 							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
+								<a class="cart_quantity_delete" href="/remove_from_cart/<%=prod_id%>"><i class="fa fa-times"></i></a>
 							</td>
 						</tr>
-						<tr>
-							<td class="cart_product">
-								<a href=""><img src="../images/cart/three.png" alt=""></a>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Colorblock Scuba</a></h4>
-								<p>Web ID: 1089772</p>
-							</td>
-							<td class="cart_price">
-								<p>$59</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
-							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
-						</tr>
+					<%
+					}
+					%>
+						
 					</tbody>
 				</table>
 			</div>
@@ -309,13 +316,29 @@
 				<div class="col-sm-6">
 					<div class="total_area">
 						<ul>
-							<li>Cart Sub Total <span>$59</span></li>
-							<li>Eco Tax <span>$2</span></li>
-							<li>Shipping Cost <span>Free</span></li>
-							<li>Total <span>$61</span></li>
+							
+	  <h2><b> TOTAL AMOUNT IN USD: <i><%=total%></i></b></h2>
+
+	  <label>Input Credit Card No.[Starting with 4 length 13 or 16 digits and Submit</label>  
+		<form name="form1" action="/your_history" onsubmit="return cardnumber(document.form1.text1)">  
+		<label>Select Card Type: 
+		<select>
+			<option value="MasterCard">MasterCard</option>
+			<option value="Visa">Visa</option>
+			<option value="american">American Express</option>
+		</select>
+		</label>
+		<label>Credit Card Holder: <input type='text' size="25" name='holder' /></label>
+		<label>Credit Card Number: <input type='text' size="25" name='text1'/> </label> 
+		<label>CVV: <input type="text" size="5" name="ccNumber" id="ccNumber" /></label>
+		<br>
+		<label>Expiry Month: <input type="text" size="10" name="expMonth" /></label>
+		<label>Expiry Year: <input type="text" size="10" name="expYear" /></label>
+		<br>
+		<a class="btn btn-default update" href="/">Update</a>
+		<input type="submit" name="submit" value="Pay" class="btn btn-default check_out" onclick="return cardnumber(document.form1.text1)"/>				
+		</form> 						
 						</ul>
-							<a class="btn btn-default update" href="">Update</a>
-							<a class="btn btn-default check_out" href="">Check Out</a>
 					</div>
 				</div>
 			</div>
