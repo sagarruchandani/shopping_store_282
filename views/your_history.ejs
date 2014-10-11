@@ -88,7 +88,7 @@
 							<ul class="nav navbar-nav">
 								<li><a href="/my_account"><i class="fa fa-user"></i> Account</a></li>
 								<li><a href="/get_cart"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<% if (typeof user_check == 'undefined') { %>
+								<% if (typeof user_check == 'undefined' || user_check==null) { %>
 								<li><a href="/login"><i class="fa fa-lock"></i> Login</a></li>
 								<%} else {%>
 								<li><a href="/my_account"><i class="fa fa-lock"></i> Hi, <%=user_check%></a></li>
