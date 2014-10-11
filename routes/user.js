@@ -1,7 +1,5 @@
 
-/*
- * GET users listing.
- */
+// MySQL Connection
 var mysql = require('mysql');
 
 var pool = mysql.createConnection({
@@ -12,7 +10,7 @@ var pool = mysql.createConnection({
   database : 'shopping_store',
   connectionLimit : '10'
 });
-
+// Amazon Web Services Connection
 var AWS = require('aws-sdk');
 AWS.config.region = 'us-east-1';
 AWS.config.update({accessKeyId: 'AKIAJ5WDAWMKMV5KBGOQ', secretAccessKey: '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'});
@@ -20,7 +18,7 @@ var dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 var categories="";
 var product="";
 
-
+// Start of Functions for various activities like Get/Put/Create/Delete products, Categories
 
 function get_all_products(callback) {
 	
@@ -119,7 +117,7 @@ function add_category(new_category,callback) {
 exports.list = function(req, res){
   res.send("respond with a resource");
 };
-
+//***** Index route ***** //
 exports.index = function(req, res){
 	get_all_categories(function(cat){ req.session.category=cat;
 		get_all_products(function(prod){  req.session.products=prod;
@@ -127,7 +125,7 @@ exports.index = function(req, res){
 		});
 	});
 };
-
+//***** New User Sign up route ***** //
 exports.signup = function(req,res){
 	var params = [req.param('email'), req.param('f_name'), req.param('l_name'), req.param('pass')];
 	if(req.param('email') ==='admin' && req.param('pass') ==='admin') {
@@ -151,7 +149,7 @@ exports.signup = function(req,res){
 	});
 };
 //connection.escape(userId) to avoid SQL Injection attacks
-
+//***** Login route ***** //
 exports.authentication=function(req,res,next){
 	
 	var all_data=[];
@@ -177,7 +175,7 @@ exports.authentication=function(req,res,next){
 	});
 	}
 };
-
+//***** Remove Category (Admin) route ***** //
 exports.remove_cat = function(req,res) {
 	var cat_name = req.params.cat_name;
 	var categories="";
@@ -190,7 +188,7 @@ exports.remove_cat = function(req,res) {
 		});
 	});
 };
-
+//***** Remove Product (Admin) route ***** //
 exports.remove_prod = function(req,res) {
 	var prod_id= req.params.prod_id;
 	var categories="";
@@ -203,7 +201,7 @@ exports.remove_prod = function(req,res) {
 		});
 	});
 };
-
+//***** Add Category (Admin) route ***** //
 exports.add_categ = function(req,res) {
 	var new_cat=req.param('new_category');
 	console.log(new_cat+" "+req.param('new_category'));
@@ -217,7 +215,7 @@ exports.add_categ = function(req,res) {
 		});
 	});
 };
-
+//***** Add Product (Admin) route ***** //
 exports.add_product= function(req,res) {
 		var params = {
   		    TableName : 'catalog',
@@ -246,7 +244,7 @@ exports.add_product= function(req,res) {
 	    }
 	  });
 };
-
+//***** Logout & session end route ***** //
 exports.logout=function(req,res){
 	req.session.username = null;
 	req.session.email= null;
@@ -256,7 +254,7 @@ exports.logout=function(req,res){
 		});
 	});
 };
-
+//***** Product Detail route ***** //
 exports.prod_details=function(req,res){
 	var prod_id = req.params.prod_id;
 	var categories="";
@@ -277,7 +275,7 @@ exports.prod_details=function(req,res){
 		      	}
 		  });
 };
-
+//***** Add Product to cart route ***** //
 exports.add_to_cart=function(req,res){
 	if(!req.session.username){
 		res.render('index',{message:'Login or Sign up to add products to the cart!',category:req.session.category, products:req.session.products});
@@ -341,7 +339,7 @@ exports.add_to_cart=function(req,res){
 	}
 });
 	} }
-
+//***** View User's cart route ***** //
 exports.view_cart=function(req,res){
 
 	if(!req.session.username){
@@ -358,7 +356,7 @@ exports.view_cart=function(req,res){
 		});	    	
 	}
 };
-
+//***** Remove from cart route ***** //
 exports.remove_from_cart=function(req,res){
 	var email=req.session.email;
 	var prod_id=req.params.prod_id;
@@ -376,7 +374,7 @@ exports.remove_from_cart=function(req,res){
 		});	   
 	
 };
-
+//***** Get products based on category route ***** //
 exports.get_category_products=function(req,res){
 	var cat_name=req.params.cat_name;
 	var params = {
@@ -396,9 +394,10 @@ exports.get_category_products=function(req,res){
 	 		}
 		});
 	}
-
+//***** After payment processing route ***** //
 exports.your_history=function(req,res){
 	params=[req.session.email,"In Cart"];
+	//***** WARNING: CALLBACK Hell Starts here ***** //
 	pool.query("select prod_id,quantity from user_session where username=? and transaction_status=?;",params,function(err, rows, fields) {
 		for(var x in  rows){
 			var params = {
@@ -464,7 +463,7 @@ exports.your_history=function(req,res){
 }
 });
 }
-//
+//***** User's account and history route ***** //
 exports.my_account=function(req,res){
 	if(!req.session.email){
 		res.render('index',{message:'Please Login to view your account',category:req.session.category, products:req.session.products});
