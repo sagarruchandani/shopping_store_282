@@ -86,10 +86,11 @@
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li><a href="#"><i class="fa fa-user"></i> Account</a></li>
-								<li><a href="#"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<li><i class="fa fa-lock"></i> Hi, Admin /<a href="/logout">logout</a></li>
-								
+								<li><a href=""><i class="fa fa-user"></i> Account</a></li>
+								<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
+								<li><a href="checkout"><i class="fa fa-crosshairs"></i> Checkout</a></li>
+								<li><a href="cart"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+								<li><a href="login" class="active"><i class="fa fa-lock"></i> Login</a></li>
 							</ul>
 						</div>
 					</div>
@@ -114,36 +115,21 @@
 								<li><a href="/">Home</a></li>
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                    <li><a href="/">All Products</a></li>
-                                    <% 
-								for (var c in category) {
-								
-								var item = category[c];
-									for (var v in item) {
-									var b= item[v];
-										for (var n in b) {
-										
-											var attribute = b[n];
-	        	        					for (var z in attribute) {
-	        	        					%>
-											<li><a href="/get_category_products/<%=attribute[z]%>" id=<%=attribute[z]%> ><%=attribute[z]%></a></li>
-											
-	        	        					<%
-	        	        					}
-										}
-									}
-								}
-								%>
+                                        <li><a href="all_products">Products</a></li>
+										<li><a href="product-details">Product Details</a></li> 
+										<li><a href="checkout">Checkout</a></li> 
+										<li><a href="cart">Cart</a></li> 
+										<li><a href="login" class="active">Login</a></li> 
                                     </ul>
                                 </li> 
 								<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="#">Blog List</a></li>
-										<li><a href="#">Blog Single</a></li>
+                                        <li><a href="blog">Blog List</a></li>
+										<li><a href="blog-single">Blog Single</a></li>
                                     </ul>
                                 </li> 
-								<li><a href="#">404</a></li>
-								<li><a href="#">Contact</a></li>
+								<li><a href="404">404</a></li>
+								<li><a href="contact-us">Contact</a></li>
 							</ul>
 						</div>
 					</div>
@@ -156,118 +142,7 @@
 			</div>
 		</div><!--/header-bottom-->
 	</header><!--/header-->
-								
-								
-								
-<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg .tg-8e65{background-color:#f8a102}
-</style>
-
-<% if (typeof message == 'undefined') { } else {%>
-<p style="color:red; margin-left:20em;"><%=message%></p>
-								<% }%>
 	
-<table class="tg">
-  <tr>
-    <th class="tg-8e65" colspan="2" style="margin-left:20em;">Category</th>
-  </tr>
-  
-  						
-					
-  <% 
-								for (var c in category) {
-								
-								var item = category[c];
-									for (var v in item) {
-									var b= item[v];
-										for (var n in b) {
-										
-											var attribute = b[n];
-	        	        					for (var z in attribute) {
-	        	        					%><tr style="margin-left:20em;"> <td class="tg-031e"><%=attribute[z]%></td>
-	        	        					<td class="tg-031e"><a href="/remove_category/<%=attribute[z]%>" id=<%=attribute[z]%> >Delete</a></td>
-	        	        					</tr>
-	        	        					<% 
-	        	        					
-	        	        					}
-										}
-									}
-								}
-								
-								%>
-</table>
-  			
-<br><br>	
-
-<form action="remove_product", method="POST">							
-<table class="tg">
-  <tr>
-    <th class="tg-8e65" colspan="3"><b>Products</b></th>
-  </tr>
-							
-<tr> <td class="tg-031e"><b>Category</b></td><td class="tg-031e"><b>Product</b></td><td class="tg-031e"><b>Delete</b></td></tr>
-	        	        			
-	
-								<%
-								var object1=[];
-								for (var k in products) {
-								
-								
-								var items = products[k];
-				        	      for (var x in items) {
-	        	        			
-	        			    	    object1[x] = items[x];
-	        	    			    var sag= items[x];
-	        	        			var keys = Object.keys(items[x]);
-								   
-									var value=null;
-	        	       					for (var y in sag) {
-	        	        					var attribute = sag[y];
-	        	        					for (var z in attribute) {
-	        	        					value = value+","+attribute[z];
-	        	        					
-	        	        											}
-	        	        					
-	        	        									}
-									
-	        	       				value= value.split(",");
-	        	       				for(var i = value.length - 1; i >= 0; i--) {
- 								   			if(value[i] === "undefined") {
-       										value.splice(i, 1);
-   										 							}
-   										 	if(value[i] === "null") {
-       										value.splice(i, 1);
-   										 							}
-   										 	if(value[i] === "") {
-       										value.splice(i, 1);
-   										 							}
-																				}
-	        	       				
-	        	       				var tempo = keys[x];
-									
-									var i=1;
-	        	        			var link_to_product="";
-	        	        			%><tr><%
-	        	        			for (var x in keys)
-	   				     	        {
-									if(x==3 || x==5) {
-	   				     	        %>
-	        	        			<td class="tg-031e"><%=value[x]%></td>
-	        	        			<% }	
-	        	        			if(x==0){  link_to_product=value[x];}
-	        	        			}
-	   				     	        %><td class="tg-031e"><a href="/remove_product/<%=link_to_product%>" id=<%=attribute[z]%> >Delete</a></td></tr>
-	   				     	        <%
-	   				     	         value = null;
-	        	        			}
-								}
-								%>
-					</table>
-	</form>							
-								
 	<section id="form"><!--form-->
 		<div class="container">
 			<div class="row">
@@ -289,30 +164,9 @@
 						<h2>Add Product</h2>
 						<form action="add_product", method="POST">
 							<input type="text" name="new_product" placeholder="Product Name" />
-							<input type="text" name="price" placeholder="Price" />
-							<input type="text" name="image" placeholder="Image" />
-							<input type="text" name="details" placeholder="Product Details" />
-							<input type="text" name="quantity" placeholder="Available Quantity" />
-							
-							<select name="drop_down_category">
-							<%
-							for (var c in category) {
-								
-								var item = category[c];
-									for (var v in item) {
-									var b= item[v];
-										for (var n in b) {
-										
-											var attribute = b[n];
-	        	        					for (var z in attribute) {
-	        	        					%><option selected="<%=attribute[z]%>" value="<%=attribute[z]%>"><%=attribute[z]%></option><%
-  																}
-  											}
-  										}
-  									}
-							%>
-							</select>
-							
+							<input type="text" name="new_product" placeholder="Price" />
+							<input type="file" name="Image" accept="image/*">
+							<input type="text" name="new_product" placeholder="Product" />
 							
 							
 							<button type="submit" class="btn btn-default">ADD</button>
@@ -322,7 +176,34 @@
 			</div>
 		</div>
 	</section><!--/form-->
-		
+		<section id="form"><!--form-->
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-4 col-sm-offset-1">
+					<div class="login-form"><!--login form-->
+						<h2>Remove Category</h2>
+						<form action="remove_category", method="POST">
+							<input type="text" name="remove_category" placeholder="Category" />
+							<button type="submit" class="btn btn-default">Remove</button>
+						</form>
+					</div><!--/login form-->
+				</div>
+				<div class="col-sm-1">
+					<h2 class="or">OR</h2>
+				</div>
+				<div class="col-sm-4">
+					<div class="signup-form"><!--sign up form-->
+						
+						<h2>Remove Product</h2>
+						<form action="remove_product", method="POST">
+							<input type="text" name="remove_product" placeholder="Product" />
+							<button type="submit" class="btn btn-default">Remove</button>
+						</form>
+					</div><!--/sign up form-->
+				</div>
+			</div>
+		</div>
+	</section><!--/form-->
 	
 	<footer id="footer"><!--Footer-->
 		<div class="footer-top">

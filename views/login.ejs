@@ -86,15 +86,11 @@
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li><a href="/my_account"><i class="fa fa-user"></i> Account</a></li>
-							
-								
-								<% if (typeof user_check == 'undefined') { %>
-								<li><a href="/login"><i class="fa fa-lock"></i> Login</a></li>
-								<%} else {%>
-								<li><a href="/my_account"><i class="fa fa-lock"></i> Hi, <%=user_check%></a></li>
-								<li><a href="/logout"><i class="fa fa-star"></i> logout</a></li>
-								<%}%>
+								<li><a href=""><i class="fa fa-user"></i> Account</a></li>
+								<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
+								<li><a href="checkout"><i class="fa fa-crosshairs"></i> Checkout</a></li>
+								<li><a href="cart"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+								<li><a href="login" class="active"><i class="fa fa-lock"></i> Login</a></li>
 							</ul>
 						</div>
 					</div>
@@ -119,36 +115,21 @@
 								<li><a href="/">Home</a></li>
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                    <li><a href="/">All Products</a></li>
-                                    <% 
-								for (var c in category) {
-								
-								var item = category[c];
-									for (var v in item) {
-									var b= item[v];
-										for (var n in b) {
-										
-											var attribute = b[n];
-	        	        					for (var z in attribute) {
-	        	        					%>
-											<li><a href="/get_category_products/<%=attribute[z]%>" id=<%=attribute[z]%> ><%=attribute[z]%></a></li>
-											
-	        	        					<%
-	        	        					}
-										}
-									}
-								}
-								%>
+                                        <li><a href="all_products">Products</a></li>
+										<li><a href="product-details">Product Details</a></li> 
+										<li><a href="checkout">Checkout</a></li> 
+										<li><a href="cart">Cart</a></li> 
+										<li><a href="login" class="active">Login</a></li> 
                                     </ul>
                                 </li> 
 								<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="#">Blog List</a></li>
-										<li><a href="#">Blog Single</a></li>
+                                        <li><a href="blog">Blog List</a></li>
+										<li><a href="blog-single">Blog Single</a></li>
                                     </ul>
                                 </li> 
-								<li><a href="#">404</a></li>
-								<li><a href="#">Contact</a></li>
+								<li><a href="404">404</a></li>
+								<li><a href="contact-us">Contact</a></li>
 							</ul>
 						</div>
 					</div>
@@ -169,7 +150,7 @@
 					<div class="login-form"><!--login form-->
 						<h2>Login to your account</h2>
 						<form action="/authenticate", method="POST">
-							<input type="text" name="email" placeholder="Email" />
+							<input type="text" name="username" placeholder="Username" />
 							<input type="password" name="pass" placeholder="Password" />
 							<span>
 								<input type="checkbox" class="checkbox"> 
@@ -186,8 +167,7 @@
 					<div class="signup-form"><!--sign up form-->
 						<h2>New User Signup!</h2>
 						<form action="/sign_up", method="POST">
-							<input type="text" name="f_name" placeholder="First Name"/>
-							<input type="text" name="l_name" placeholder="Last Name"/>
+							<input type="text" name="username" placeholder="Name"/>
 							<input type="email" name="email" placeholder="Email Address"/>
 							<input type="password" name="pass" placeholder="Password"/>
 							<button type="submit" class="btn btn-default">Signup</button>
