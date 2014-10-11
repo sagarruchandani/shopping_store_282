@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Cart | E-Shopper</title>
+    <title>Checkout | E-Shopper</title>
     <link href="../stylesheets/bootstrap.min.css" rel="stylesheet">
     <link href="../stylesheets/font-awesome.min.css" rel="stylesheet">
     <link href="../stylesheets/prettyPhoto.css" rel="stylesheet">
@@ -22,23 +22,6 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="../images/ico/apple-touch-icon-57-precomposed.png">
-    
-    <script>
-function cardnumber(inputtxt)  
-{  
-  var cardno = /^(?:4[0-9]{12}(?:[0-9]{3})?)$/;  
-  if(inputtxt.value.match(cardno))  
-        {  
-      return true;  
-        }  
-      else  
-        {  
-        alert("Not a valid Visa credit card number!");  
-        return false;
-        }  
-};
-</script>
-
 </head><!--/head-->
 
 <body>
@@ -104,15 +87,13 @@ function cardnumber(inputtxt)
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
 								<li><a href="/my_account"><i class="fa fa-user"></i> Account</a></li>
-								<li><a href="/get_cart" class="active"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								
+								<li><a href="/get_cart"><i class="fa fa-shopping-cart"></i> Cart</a></li>
 								<% if (typeof user_check == 'undefined') { %>
 								<li><a href="/login"><i class="fa fa-lock"></i> Login</a></li>
 								<%} else {%>
 								<li><a href="/my_account"><i class="fa fa-lock"></i> Hi, <%=user_check%></a></li>
 								<li><a href="/logout"><i class="fa fa-star"></i> logout</a></li>
 								<%}%>
-								
 							</ul>
 						</div>
 					</div>
@@ -185,13 +166,14 @@ function cardnumber(inputtxt)
 			<div class="breadcrumbs">
 				<ol class="breadcrumb">
 				  <li><a href="#">Home</a></li>
-				  <li class="active">Shopping Cart</li>
+				  <li class="active">Check out</li>
 				</ol>
+			</div><!--/breadcrums-->
+
+			<div class="step-one">
+				<h2 class="heading"><%=user_check%>'s Account</h2>
 			</div>
 			<div class="table-responsive cart_info">
-			<% if (typeof message == 'undefined') { } else {%>
-			<p style="color:red; margin-left:20em;"><%=message%></p>
-								<% }%>
 			
 				<table class="table table-condensed">
 					<thead>
@@ -201,15 +183,16 @@ function cardnumber(inputtxt)
 							<td class="price">Price</td>
 							<td class="quantity">Quantity</td>
 							<td class="total">Total</td>
+							<td class="total">Purchase Date</td>
 							<td></td>
 						</tr>
 					</thead>
 					
 					<tbody>
 					<%
-					for(var row in current_cart){
+					for(var row in my_cart){
 						var image="";var product="";var prod_id="";var price="";var quantity="";var total="";
-						var column = current_cart[row];
+						var column = my_cart[row];
 						for(var col in column)
 						{
 						
@@ -218,6 +201,7 @@ function cardnumber(inputtxt)
 						if(col=="image"){image=column[col];}
 						if(col=="price"){price=column[col];}
 						if(col=="quantity"){quantity=column[col];}
+						if(col=="id"){purchase_date=column[col];}
 						}
 					%>
 						<tr>
@@ -238,8 +222,8 @@ function cardnumber(inputtxt)
 							<td class="cart_total">
 								<p class="cart_total_price"><%=quantity*price%></p>
 							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href="/remove_from_cart/<%=prod_id%>"><i class="fa fa-times"></i></a>
+							<td class="cart_price">
+								<p><%=purchase_date.getMonth()%>-<%=purchase_date.getDate()%>-<%=purchase_date.getFullYear()%></p>
 							</td>
 						</tr>
 					<%
@@ -249,101 +233,11 @@ function cardnumber(inputtxt)
 					</tbody>
 				</table>
 			</div>
+			
 		</div>
 	</section> <!--/#cart_items-->
 
-	<section id="do_action">
-		<div class="container">
-			<div class="heading">
-				<h3>What would you like to do next?</h3>
-				<p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
-			</div>
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="chose_area">
-						<ul class="user_option">
-							<li>
-								<input type="checkbox">
-								<label>Use Coupon Code</label>
-							</li>
-							<li>
-								<input type="checkbox">
-								<label>Use Gift Voucher</label>
-							</li>
-							<li>
-								<input type="checkbox">
-								<label>Estimate Shipping & Taxes</label>
-							</li>
-						</ul>
-						<ul class="user_info">
-							<li class="single_field">
-								<label>Country:</label>
-								<select>
-									<option>United States</option>
-									<option>Bangladesh</option>
-									<option>UK</option>
-									<option>India</option>
-									<option>Pakistan</option>
-									<option>Ucrane</option>
-									<option>Canada</option>
-									<option>Dubai</option>
-								</select>
-								
-							</li>
-							<li class="single_field">
-								<label>Region / State:</label>
-								<select>
-									<option>Select</option>
-									<option>Dhaka</option>
-									<option>London</option>
-									<option>Dillih</option>
-									<option>Lahore</option>
-									<option>Alaska</option>
-									<option>Canada</option>
-									<option>Dubai</option>
-								</select>
-							
-							</li>
-							<li class="single_field zip-field">
-								<label>Zip Code:</label>
-								<input type="text">
-							</li>
-						</ul>
-						<a class="btn btn-default update" href="">Get Quotes</a>
-						<a class="btn btn-default check_out" href="">Continue</a>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="total_area">
-						<ul>
-							
-	  <h2><b> TOTAL AMOUNT IN USD: <i><%=total%></i></b></h2>
-
-	  <label>Input Credit Card No.[Starting with 4 length 13 or 16 digits and Submit</label>  
-		<form name="form1" action="/your_history" onsubmit="return cardnumber(document.form1.text1)">  
-		<label>Select Card Type: 
-		<select>
-			<option value="MasterCard">MasterCard</option>
-			<option value="Visa">Visa</option>
-			<option value="american">American Express</option>
-		</select>
-		</label>
-		<label>Credit Card Holder: <input type='text' size="25" name='holder' /></label>
-		<label>Credit Card Number: <input type='text' size="25" name='text1'/> </label> 
-		<label>CVV: <input type="text" size="5" name="ccNumber" id="ccNumber" /></label>
-		<br>
-		<label>Expiry Month: <input type="text" size="10" name="expMonth" /></label>
-		<label>Expiry Year: <input type="text" size="10" name="expYear" /></label>
-		<br>
-		<a class="btn btn-default update" href="/">Update</a>
-		<input type="submit" name="submit" value="Pay" class="btn btn-default check_out" onclick="return cardnumber(document.form1.text1)"/>				
-		</form> 						
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section><!--/#do_action-->
+	
 
 	<footer id="footer"><!--Footer-->
 		<div class="footer-top">
@@ -507,7 +401,7 @@ function cardnumber(inputtxt)
 
     <script src="../js/jquery.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/jquery.scrollUp.min.js"></script>
+    <script src="../js/jquery.scrollUp.min.js"></script>
     <script src="../js/jquery.prettyPhoto.js"></script>
     <script src="../js/main.js"></script>
 </body>

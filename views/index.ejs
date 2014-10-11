@@ -87,16 +87,16 @@
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li><a href="#"><i class="fa fa-user"></i> Account</a></li>
-								<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
-								<li><a href="checkout"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-								<li><a href="cart"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+								<li><a href="/my_account"><i class="fa fa-user"></i> Account</a></li>
+								<li><a href="/get_cart"><i class="fa fa-shopping-cart"></i> Cart</a></li>
 								
 								
-								<% if (typeof username == 'undefined') { %>
-								<li><a href="login"><i class="fa fa-lock"></i> Login</a></li>
+								<% if (typeof user_check == 'undefined') { %>
+								<li><a href="/login"><i class="fa fa-lock"></i> Login</a></li>
 								<%} else {%>
-								<li><a href="login"><i class="fa fa-lock"></i> Hi, <%=username%></a>/<a href="/logout">logout</a></li>
+								<li><a href="/my_account"><i class="fa fa-lock"></i> Hi, <%=user_check%></a></li>
+								<li><a href="/logout"><i class="fa fa-star"></i> logout</a></li>
+								
 								<% }%>
 							
 							</ul>
@@ -123,20 +123,36 @@
 								<li><a href="/" class="active">Home</a></li>
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="all_products">All Products</a></li>
-										<li><a href="checkout">Put dynamic</a></li> 
-										<li><a href="cart">Categories</a></li> 
-										<li><a href="login">Here</a></li> 
+                                    <li><a href="/">All Products</a></li>
+                                    <% 
+								for (var c in category) {
+								
+								var item = category[c];
+									for (var v in item) {
+									var b= item[v];
+										for (var n in b) {
+										
+											var attribute = b[n];
+	        	        					for (var z in attribute) {
+	        	        					%>
+											<li><a href="/get_category_products/<%=attribute[z]%>" id=<%=attribute[z]%> ><%=attribute[z]%></a></li>
+											
+	        	        					<%
+	        	        					}
+										}
+									}
+								}
+								%>
                                     </ul>
                                 </li> 
 								<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="blog">Blog List</a></li>
-										<li><a href="blog-single">Blog Single</a></li>
+                                        <li><a href="#">Blog List</a></li>
+										<li><a href="#">Blog Single</a></li>
                                     </ul>
                                 </li> 
-								<li><a href="404">404</a></li>
-								<li><a href="contact-us">Contact</a></li>
+								<li><a href="#">404</a></li>
+								<li><a href="#">Contact</a></li>
 							</ul>
 						</div>
 					</div>
@@ -144,6 +160,15 @@
 			</div>
 		</div><!--/header-bottom-->
 	</header><!--/header-->
+	
+	
+
+
+
+								<% if (typeof message == 'undefined') { } else {%>
+<p style="color:red; margin-left:20em;"><%=message%></p>
+								<% }%>
+	
 	
 	<section id="slider"><!--slider-->
 		<div class="container">
@@ -233,7 +258,7 @@
 	        	        					%>
 											<div class="panel panel-default">
 												<div class="panel-heading">
-													<h4 class="panel-title"><a href="view_category/<%=attribute[z]%>" id=<%=attribute[z]%> ><%=attribute[z]%></a></h4>
+													<h4 class="panel-title"><a href="/get_category_products/<%=attribute[z]%>" id=<%=attribute[z]%> ><%=attribute[z]%></a></h4>
 												</div>
 											</div>
 	        	        					<%
@@ -308,21 +333,21 @@
 	   				     	        
 	   				     	     	if(x==0) { prod_id = value[x]; }
 	   				     	     	if(x==1) { prod_image = value[x]; }
-	   				     	     	if(x==3) { prod_price = value[x]; }
-	   				     	     	if(x==4) { prod_name = value[x]; }
+	   				     	     	if(x==4) { prod_price = value[x]; }
+	   				     	     	if(x==5) { prod_name = value[x]; }
 	   				     	     	
 	   				     	        }
 	   				     	        %>
 	   				     	        <img src="../images/<%=prod_image%>" alt="" />
 											<h2>$<%=prod_price%></h2>
-											<p><a href="product_details/<%=prod_id%>" id=<%=prod_id%>><%=prod_name%></a></p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+											<p><a href="/product_details/<%=prod_id%>" id=<%=prod_id%>><%=prod_name%></a></p>
+											<a href="/product_details/<%=prod_id%>" class="btn btn-default add-to-cart" id=<%=prod_id%>> <i class="fa fa-shopping-cart"></i>Product details</a>
 										</div>
 										<div class="product-overlay">
 											<div class="overlay-content">
 												<h2>$<%=prod_price%></h2>
-												<p><a href="product_details/<%=prod_id%>" id=<%=prod_id%>><%=prod_name%></a></p>
-												<a href="add_to_cart/<%=prod_id%>" class="btn btn-default add-to-cart" id=<%=prod_id%>> <i class="fa fa-shopping-cart"></i>Add to cart</a>
+												<p><a href="/product_details/<%=prod_id%>" id=<%=prod_id%>><%=prod_name%></a></p>
+												<a href="/product_details/<%=prod_id%>" class="btn btn-default add-to-cart" id=<%=prod_id%>> <i class="fa fa-shopping-cart"></i>Product details</a>
 											</div>
 										</div>
 								</div>

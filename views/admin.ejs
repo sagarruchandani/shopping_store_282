@@ -86,11 +86,10 @@
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li><a href=""><i class="fa fa-user"></i> Account</a></li>
-								<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
-								<li><a href="checkout"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-								<li><a href="cart"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<li><a href="login" class="active"><i class="fa fa-lock"></i> Login</a></li>
+								<li><a href="#"><i class="fa fa-user"></i> Account</a></li>
+								<li><a href="#"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+								<li><i class="fa fa-lock"></i> Hi, Admin /<a href="/logout">logout</a></li>
+								
 							</ul>
 						</div>
 					</div>
@@ -115,21 +114,36 @@
 								<li><a href="/">Home</a></li>
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="all_products">Products</a></li>
-										<li><a href="product-details">Product Details</a></li> 
-										<li><a href="checkout">Checkout</a></li> 
-										<li><a href="cart">Cart</a></li> 
-										<li><a href="login" class="active">Login</a></li> 
+                                    <li><a href="/">All Products</a></li>
+                                    <% 
+								for (var c in category) {
+								
+								var item = category[c];
+									for (var v in item) {
+									var b= item[v];
+										for (var n in b) {
+										
+											var attribute = b[n];
+	        	        					for (var z in attribute) {
+	        	        					%>
+											<li><a href="/get_category_products/<%=attribute[z]%>" id=<%=attribute[z]%> ><%=attribute[z]%></a></li>
+											
+	        	        					<%
+	        	        					}
+										}
+									}
+								}
+								%>
                                     </ul>
                                 </li> 
 								<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="blog">Blog List</a></li>
-										<li><a href="blog-single">Blog Single</a></li>
+                                        <li><a href="#">Blog List</a></li>
+										<li><a href="#">Blog Single</a></li>
                                     </ul>
                                 </li> 
-								<li><a href="404">404</a></li>
-								<li><a href="contact-us">Contact</a></li>
+								<li><a href="#">404</a></li>
+								<li><a href="#">Contact</a></li>
 							</ul>
 						</div>
 					</div>
@@ -152,16 +166,18 @@
 .tg .tg-8e65{background-color:#f8a102}
 </style>
 
-
+<% if (typeof message == 'undefined') { } else {%>
+<p style="color:red; margin-left:20em;"><%=message%></p>
+								<% }%>
 	
 <table class="tg">
   <tr>
-    <th class="tg-8e65" colspan="2">Category</th>
+    <th class="tg-8e65" colspan="2" style="margin-left:20em;">Category</th>
   </tr>
   
   						
 					
-  <% var drop_down_categories=[];
+  <% 
 								for (var c in category) {
 								
 								var item = category[c];
@@ -171,18 +187,18 @@
 										
 											var attribute = b[n];
 	        	        					for (var z in attribute) {
-	        	        					%><tr> <td class="tg-031e"><%=attribute[z]%></td>
-	        	        					<td class="tg-031e"><a href="remove_category/<%=attribute[z]%>" id=<%=attribute[z]%> >Delete</a></td>
+	        	        					%><tr style="margin-left:20em;"> <td class="tg-031e"><%=attribute[z]%></td>
+	        	        					<td class="tg-031e"><a href="/remove_category/<%=attribute[z]%>" id=<%=attribute[z]%> >Delete</a></td>
 	        	        					</tr>
-	        	        					<% drop_down_categories[z]=attribute[z];
+	        	        					<% 
+	        	        					
 	        	        					}
 										}
 									}
 								}
+								
 								%>
 </table>
-								
-					
   			
 <br><br>	
 
@@ -192,7 +208,7 @@
     <th class="tg-8e65" colspan="3"><b>Products</b></th>
   </tr>
 							
-<tr> <td class="tg-031e"><b>Product</b></td><td class="tg-031e"><b>Category</b></td><td class="tg-031e"><b>Delete</b></td></tr>
+<tr> <td class="tg-031e"><b>Category</b></td><td class="tg-031e"><b>Product</b></td><td class="tg-031e"><b>Delete</b></td></tr>
 	        	        			
 	
 								<%
@@ -225,6 +241,9 @@
    										 	if(value[i] === "null") {
        										value.splice(i, 1);
    										 							}
+   										 	if(value[i] === "") {
+       										value.splice(i, 1);
+   										 							}
 																				}
 	        	       				
 	        	       				var tempo = keys[x];
@@ -234,13 +253,13 @@
 	        	        			%><tr><%
 	        	        			for (var x in keys)
 	   				     	        {
-									if(x==0 || x==2) {
+									if(x==3 || x==5) {
 	   				     	        %>
 	        	        			<td class="tg-031e"><%=value[x]%></td>
 	        	        			<% }	
-	        	        			if(x==1){  link_to_product=value[x];}
+	        	        			if(x==0){  link_to_product=value[x];}
 	        	        			}
-	   				     	        %><td class="tg-031e"><a href="remove_product/<%=link_to_product%>" id=<%=attribute[z]%> >Delete</a></td></tr>
+	   				     	        %><td class="tg-031e"><a href="/remove_product/<%=link_to_product%>" id=<%=attribute[z]%> >Delete</a></td></tr>
 	   				     	        <%
 	   				     	         value = null;
 	        	        			}
@@ -271,11 +290,27 @@
 						<form action="add_product", method="POST">
 							<input type="text" name="new_product" placeholder="Product Name" />
 							<input type="text" name="price" placeholder="Price" />
-							<input type="file" name="image" accept="image/*">
-							<select id="drop_down_category">
-							<% for (var cat_list in drop_down_categories) { %>
-  							<option value="<%=drop_down_categories[cat_list]%>"><%=drop_down_categories[cat_list]%></option>
-  							<% } %>
+							<input type="text" name="image" placeholder="Image" />
+							<input type="text" name="details" placeholder="Product Details" />
+							<input type="text" name="quantity" placeholder="Available Quantity" />
+							
+							<select name="drop_down_category">
+							<%
+							for (var c in category) {
+								
+								var item = category[c];
+									for (var v in item) {
+									var b= item[v];
+										for (var n in b) {
+										
+											var attribute = b[n];
+	        	        					for (var z in attribute) {
+	        	        					%><option selected="<%=attribute[z]%>" value="<%=attribute[z]%>"><%=attribute[z]%></option><%
+  																}
+  											}
+  										}
+  									}
+							%>
 							</select>
 							
 							
