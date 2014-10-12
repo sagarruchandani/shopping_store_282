@@ -167,14 +167,15 @@ exports.authentication=function(req,res,next){
 		res.render('login',{message:'Sorry. could not find this user. please check email and password.',category:req.session.category, products: req.session.products});
 		
 		} else {
-			if( (req.param('email') !==rows[0].email) || (req.param('pass') !==rows[0].pass)){
+			if( rows.length < 1 || !rows || !rows[0] || rows.length.toString()==0 || rows.length==0){
 			res.render('login',{message:'Username or password appears to be incorrect. please check username and password.',category:req.session.category, products: req.session.products});
 			
-			}
+			} else {
 			req.session.username= rows[0].f_name;
 			req.session.email= rows[0].email;
 			req.session.cart_counter=0;
 			res.render('index',{message:'User Successfully Logged In',category:req.session.category, products:req.session.products, user_check:req.session.username});
+			}
 		}
 	});
 	}
