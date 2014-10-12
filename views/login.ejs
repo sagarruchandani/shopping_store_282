@@ -161,7 +161,9 @@
 			</div>
 		</div><!--/header-bottom-->
 	</header><!--/header-->
-	
+	<% if (typeof message == 'undefined') { } else {%>
+<p style="color:red; margin-left:20em;"><%=message%></p>
+								<% }%>
 	<section id="form"><!--form-->
 		<div class="container">
 			<div class="row">
