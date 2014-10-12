@@ -129,12 +129,13 @@ exports.index = function(req, res){
 exports.signup = function(req,res){
 	var params = [req.param('email'), req.param('f_name'), req.param('l_name'), req.param('pass')];
 	if(req.param('email') ==='admin' && req.param('pass') ==='admin') {
-		res.redirect('login',{message: 'Cannot sign up as Admin. Use any other username'});
+		res.render('login',{message:'Cannot sign up as Admin. Use any other username',category:req.session.category, products: req.session.products});
 		}
 	
 	pool.query("insert into user values (?,?,?,?);",params,function(err, rows, fields) {
 		if (err) {
-			res.render('login',{message: 'Sorry, user already exists. please try different email id.'});
+			res.render('login',{message:'Sorry, user already exists. please try different email id.',category:req.session.category, products: req.session.products});
+		
 		} else {
 			req.session.username= req.param('f_name');
 			req.session.email=req.param('email');
@@ -142,7 +143,7 @@ exports.signup = function(req,res){
 			
 			get_all_categories(function(cat){ categories=cat;
 			get_all_products(function(prod){ product=prod;
-				res.render('index',{message:'User Successfully Created',category:categories, products:product, user_check: req.session.username});
+				res.render('index',{message:'User Successfully Created',category:req.session.category, products: req.session.products, user_check: req.session.username});
 			});
 		});
 		}
@@ -158,14 +159,17 @@ exports.authentication=function(req,res,next){
 		var categories="";
 		var product="";
 		res.render('admin',{message:'admin',category:req.session.category, products: req.session.products});
+		
 	}
 	else {
 		pool.query("select * from user where email=? and pass=? limit 1;",params,function(err, rows, fields) {
 		if (err) {
-		res.render('login',{message: 'Sorry. could not find this user. please check email and password.'});
+		res.render('login',{message:'Sorry. could not find this user. please check email and password.',category:req.session.category, products: req.session.products});
+		
 		} else {
 			if( (req.param('email') !==rows[0].email) || (req.param('pass') !==rows[0].pass)){
-				res.render('login',{message: 'Username or password appears to be incorrect. please check username and password.'});
+			res.render('login',{message:'Username or password appears to be incorrect. please check username and password.',category:req.session.category, products: req.session.products});
+			
 			}
 			req.session.username= rows[0].f_name;
 			req.session.email= rows[0].email;
