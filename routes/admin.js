@@ -5,7 +5,7 @@
 
 var AWS = require('aws-sdk');
 AWS.config.region = 'us-east-1';
-AWS.config.update({accessKeyId: 'AKIAJZUHAAYNHF4XIJ3Q', secretAccessKey: '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'});
+AWS.config.update({accessKeyId: 'AWS_ACCESS_KEY', secretAccessKey: 'AWS_SECRET_ACCESS_KEY'});
 
 
 exports.add_category = function(req, res){
