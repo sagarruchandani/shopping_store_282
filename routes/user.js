@@ -3,17 +3,17 @@
 var mysql = require('mysql');
 
 var pool = mysql.createConnection({
-  host     : 'user.crf2mftam4cg.us-east-1.rds.amazonaws.com',
-  user     : 'root',
-  password : 'sagar009428731',
+  host     : 'AWS_RDS_ENDPOINT',
+  user     : 'RDS_USER',
+  password : 'RDS_PASSWORD',
   port     : '3306',
-  database : 'shopping_store',
+  database : 'RDS_DB_NAME',
   connectionLimit : '10'
 });
 // Amazon Web Services Connection
 var AWS = require('aws-sdk');
 AWS.config.region = 'us-east-1';
-AWS.config.update({accessKeyId: 'AKIAJ5WDAWMKMV5KBGOQ', secretAccessKey: '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'});
+AWS.config.update({accessKeyId: 'AWS_ACCESS_KEY', secretAccessKey: 'AWS_SECRET_ACCESS_KEY'});
 var dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 var categories="";
 var product="";
